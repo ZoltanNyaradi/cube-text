@@ -1,1 +1,1 @@
-document.getElementsByTagName("h1")[1].innerHTML="Bye!";
+//document.getElementsByTagName("h1")[1].innerHTML="Bye!";
