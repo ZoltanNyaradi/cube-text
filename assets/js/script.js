@@ -1,37 +1,84 @@
+/**
+ * DOM Loaded
+ * 
+ * Declear event listeners.
+ * Run setCanvasSize() what runs draw().
+ */
 document.addEventListener("DOMContentLoaded",function(){
-	canvas = document.getElementsByTagName("canvas")[0];
-	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
-	let canvasWidth = 0;
-
-		
-	measure();
-
-	window.addEventListener("resize", measure);
-
+	// setCanvasSize
+	setCanvasSize();
+	// Run setCanvasSize() if the screen is resized.
+	window.addEventListener("resize", setCanvasSize);
+	// Different actions trigger the draw function.
 	document.getElementById("user-text").addEventListener("input",draw);
 	document.getElementById("color-comb").addEventListener("change",draw);
 	document.getElementById("cube-color").addEventListener("change",draw);
-
+	// Download button starts download an image from the canvas.
 	document.getElementById("download").addEventListener("click",download);
-	
+	// With a color picker the user changes the backgrond of the canvas.
 	document.getElementById("cube-background").addEventListener("change",changeBackground);
-})	
-function measure(){
+})
+/**
+ * Set size of the canvas, run draw()
+ * */	
+function setCanvasSize(){
+	let canvas = document.getElementsByTagName("canvas")[0];
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
-	canvasWidth = document.getElementsByTagName("canvas")[0].width;
 	
 	draw();
 }
-
+/**
+ * Draw the cube text
+ * */
 function draw(){
-	
 }
-
+/**
+ * Download an image from canvas
+ */
 function download(){
 	console.log("File downloaded!");
 }
+/**
+ * Change background of canvas
+ */
 function changeBackground(){
 	console.log("Background changed!");
+}
+
+function letter(letter){
+	let letters={
+		"a":[[0,0],[1,0],[2,0],[3,0],[4,0],[0,1],[2,1],[0,2],[1,2],[2,2],[3,2],[4,2]],
+		"b":[[0,0],[1,0],[2,0],[3,0],[4,0],[1,2],[1,4],[2,2],[3,2],[4,2]],
+		"c":[[0,0],[1,0],[2,0],[3,0],[4,0],[0,1],[4,1],[0,2],[4,2]],
+		"d":[[2,0],[3,0],[4,0],[1,2],[1,4],[0,2],[1,2],[2,2],[3,2],[4,2]],
+		"e":[[0,0],[1,0],[2,0],[3,0],[4,0],[0,1],[2,1],[4,1],[0,2],[1,2],[2,2],[4,2]],
+		"f":[[0,0],[1,0],[2,0],[3,0],[4,0],[0,1],[2,1],[0,2],[2,2]],
+		"g":[[0,0],[1,0],[2,0],[3,0],[4,0],[0,1],[4,1],[0,2],[2,2],[4,2],[0,3],[2,3],[3,3],[4,3]],
+		"h":[[0,0],[1,0],[2,0],[3,0],[4,0],[1,2],[0,2],[1,2],[2,2],[3,2],[4,2]],
+		"i":[[0,0],[1,0],[2,0],[3,0],[4,0]],
+		"j":[[3,0],[4,0],[4,1],[0,2],[1,2],[2,2],[3,2],[4,2]],
+		"k":[[0,0],[1,0],[2,0],[3,0],[4,0],[1,2],[0,2],[1,2],[3,2],[4,2]],
+		"l":[[0,0],[1,0],[2,0],[3,0],[4,0],[4,1],[4,2]],
+		"m":[[0,0],[1,0],[2,0],[3,0],[4,0],[1,1],[2,2],[1,3],[0,4],[1,4],[2,4],[3,4],[4,4]],
+		"n":[[0,0],[1,0],[2,0],[3,0],[4,0],[1,1],[2,1],[2,2],[3,2],[0,3],[1,3],[2,3],[3,3],[4,3]],
+		"o":[[0,0],[1,0],[2,0],[3,0],[4,0],[0,1],[4,1],[0,2],[4,2],[0,3],[1,3],[2,3],[3,3],[4,3]],
+		"p":[[0,0],[1,0],[2,0],[3,0],[4,0],[0,1],[2,1],[0,2],[1,2],[2,2]],
+		"q":[[0,0],[1,0],[2,0],[3,0],[4,0],[0,1],[4,1],[0,2],[3,2],[4,2],[0,3],[1,3],[2,3],[3,3],[4,3]],
+		"r":[[0,0],[1,0],[2,0],[3,0],[4,0],[0,1],[2,1],[3,1],[0,2],[1,2],[2,2],[2,4]],
+		"s":[[0,0],[1,0],[2,0],[4,0],[4,0],[0,1],[1,2],[1,4],[0,2],[2,2],[3,2],[4,2]],
+		"t":[[0,0],[0,1],[1,1],[2,1],[3,1],[4,1],[2,0]],
+		"u":[[0,0],[1,0],[2,0],[3,0],[4,0],[4,1],[0,2],[1,2],[2,2],[3,2],[4,2]],
+		"v":[[0,0],[1,0],[2,0],[3,0],[4,1],[0,2],[1,2],[2,2],[3,2]],
+		"w":[[0,0],[1,0],[2,0],[3,0],[4,1],[0,2],[1,2],[2,2],[3,2],[4,3],[0,4],[1,4],[2,4],[3,4]],
+		"x":[[0,0],[1,0],[3,0],[4,0],[1,2],[0,2],[1,2],[3,2],[4,2]],
+		"y":[[0,0],[1,0],[2,0],[3,1],[4,1],[0,2],[1,2],[2,2]],
+		"z":[[0,0],[3,0],[4,0],[0,1],[2,1],[4,1],[0,2],[1,2],[4,2]],
+	};
+	if (letters[letter] !== undefined){
+		return letters[letter];
+	}
+	else{
+		return [[]]
+	}
 }
