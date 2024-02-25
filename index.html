@@ -16,40 +16,43 @@
 		<link rel="stylesheet" href="assets/css/style.css"></link>
 	</head>
 	<body>
-		<!-- Header, but hiden-->
+		<!-- Header, but hidden-->
 		<header>
 			<h1>Cube Text</h1>
 		</header>
 		<!-- Drawing area -->
 		<canvas></canvas>
-		<!-- Options -->
 		<section>
+			<!-- User text -->
 			<div>
 				<input type="text" id="user-text" placeholder="Type your cubetext!">
+			</div>
+			<!-- Options -->
+			<div id=options>	
+				<div id="download-div">
+					<button type="button" id="download">Download</button>
+					<label for="download">Download with transparent color.</label>
+				</div>
+				<div>
+					<select id="color-comb">
+					    <option value="single">Single color</option>
+					    <option value="rainbow-letter">Rainbow color by letter</option>
+					    <option value="random-letter">Random color by letter</option>
+					    <option value="rainbow-cube">Rainbow color by cubes</option>
+					    <option value="random-cube">Random color by cubes</option>
+				  	</select>
+				</div>
+				<div>
+					<div>
+						<input type="color" id="cube-color">
+						<label for=cube-color>Chose a color!</label>
+					</div>
+					<div>
+						<input type="color" id="cube-background">
+						<label for=cube-color>Chose a background color!</label>
+					</div>
+				</div>
 			</div>	
-			<div>
-				<button type="button" id="download">Download</button>
-				<label for="download">Download with transparent color.</label>
-			</div>
-			<div>
-				<select id="color-comb">
-				    <option value="single">Single color</option>
-				    <option value="rainbow-letter">Rainbow color by letter</option>
-				    <option value="random-letter">Random color by letter</option>
-				    <option value="rainbow-cube">Rainbow color by cubes</option>
-				    <option value="random-cube">Random color by cubes</option>
-			  	</select>
-			</div>
-			<div>
-				<div>
-					<input type="color" id="cube-color">
-					<label for=cube-color>Chose a color!</label>
-				</div>
-				<div>
-					<input type="color" id="cube-background">
-					<label for=cube-color>Chose a background color!</label>
-				</div>
-			</div>
 		</section>
 		<!-- JavaScript -->
 		<script src="assets/js/script.js"></script>
