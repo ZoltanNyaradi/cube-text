@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded",function(){
 	// With a color picker the user changes the backgrond of the canvas.
 	document.getElementById("cube-background").addEventListener("change",changeBackground);
 })
+
 /**
  * Set size of the canvas, run draw()
  * */	
@@ -28,10 +29,15 @@ function setCanvasSize(){
 	
 	draw();
 }
+
 /**
  * Draw the cube text
  * */
 function draw(){
+	let canvas = document.getElementsByTagName("canvas")[0];
+	const ctx = canvas.getContext('2d');
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+
 	let lines =[];
 	if (document.getElementById("user-text").value === ""){
 		lines = ["cube text"];
@@ -39,55 +45,77 @@ function draw(){
 		// lower case
 		// calculate lines
 		// split
-		lines = ["cube","text","test"];
+		lines = [document.getElementById("user-text").value,"mm"];
 	}
 	for (lineIndex in lines){
 		let letters = lines[lineIndex];
 		let horisontalLetterPosition = 0;
+
+			// Get the lenght of the line
+			let lengthOfLines=0;
 			for (letterIndex in letters){
 				let letterPlan = letterPlans(letters[letterIndex]);
+				lengthOfLines += letterPlan.slice(-1)[0][1]+2;
+				console.log(lengthOfLines);
+			}
+
+			lengthOfLines -= 2;
+			for (letterIndex in letters){
+				if (letters[letterIndex]!==" "){
+				let letterPlan = letterPlans(letters[letterIndex]);
 				let horisontalShift;
-				for(cubeIndex in letterPlan){
-					cube = letterPlan[cubeIndex];
-					 drawCube(cube[0] + lineIndex*6, cube[1] + horisontalLetterPosition);
-					 horisontalShift = cube[1];
+					for(cubeIndex in letterPlan){
+						cube = letterPlan[cubeIndex];
+						drawCube(cube[0] + lineIndex*6,
+						 	cube[1] + horisontalLetterPosition,
+						 	lines.length,
+						 	lengthOfLines);
+						horisontalShift = cube[1];
+					}
+					horisontalLetterPosition += horisontalShift + 2;
+				} else {
+					horisontalLetterPosition++;
 				}
-				horisontalLetterPosition += horisontalShift + 2;
+
 			}
 	}
 }
-function drawCube(x, y){
-	console.log("x: "+ x +" y: "+y);
+
+function drawCube(x, y, numOfLines, lengthOfLines){
+	console.log(lengthOfLines);
 	xx=15;
 	yy=15;
-	x*=xx;
-	y*=yy;
+	x=x*xx+xx;
+	y=y*yy+yy;
 	let can = document.getElementsByTagName("canvas")[0];
 	let ctx = can.getContext("2d");
 
 	ctx.lineWidth = 2;
 	ctx.beginPath();
 	ctx.moveTo(y,x);
-	ctx.lineTo(y+yy,x);
-	ctx.lineTo(y+yy,x+xx);
-	ctx.lineTo(y,x+xx);
+	ctx.lineTo(y+yy-1,x);
+	ctx.lineTo(y+yy-1,x+xx-1);
+	ctx.lineTo(y,x+xx-1);
 	ctx.closePath();
 	ctx.stroke();
 	ctx.fillStyle = "#3366FF";
 	ctx.fill();
 }
+
 /**
  * Download an image from canvas
  */
 function download(){
 	console.log("File downloaded!");
 }
+
 /**
  * Change background of canvas
  */
 function changeBackground(){
 	console.log("Background changed!");
 }
+
 /**
  * Returns the given letter's building cube's coordinates.
  */
@@ -119,6 +147,7 @@ function letterPlans(letter){
 		"x":[[0,0],[1,0],[3,0],[4,0],[2,1],[0,2],[1,2],[3,2],[4,2]],
 		"y":[[0,0],[1,0],[2,0],[3,1],[4,1],[0,2],[1,2],[2,2]],
 		"z":[[0,0],[3,0],[4,0],[0,1],[2,1],[4,1],[0,2],[1,2],[4,2]],
+		" ":[[0,-1]],
 	};
 	if (letters[letter] !== undefined){
 		return letters[letter];
