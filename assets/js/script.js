@@ -44,47 +44,102 @@ function draw(){
 	}else{
 		// lower case
 		// calculate lines
-		// split
-		lines = [document.getElementById("user-text").value,"mm"];
+		lines = splitText();
 	}
 	for (lineIndex in lines){
 		let letters = lines[lineIndex];
 		let horisontalLetterPosition = 0;
 
-			// Get the lenght of the line
-			let lengthOfLines=0;
-			for (letterIndex in letters){
-				let letterPlan = letterPlans(letters[letterIndex]);
-				lengthOfLines += letterPlan.slice(-1)[0][1]+2;
-				console.log(lengthOfLines);
-			}
 
-			lengthOfLines -= 2;
-			for (letterIndex in letters){
-				if (letters[letterIndex]!==" "){
+			// Get the lenght of the line
+		let lengthOfLines=0;
+		for (letterIndex in letters){
+			let letterPlan = letterPlans(letters[letterIndex]);
+			lengthOfLines += letterPlan.slice(-1)[0][1]+2;
+		}
+
+		lengthOfLines -= 2;
+		for (letterIndex in letters){
+			if (letters[letterIndex]!==" "){
 				let letterPlan = letterPlans(letters[letterIndex]);
 				let horisontalShift;
 					for(cubeIndex in letterPlan){
-						cube = letterPlan[cubeIndex];
+						let cube = letterPlan[cubeIndex];
 						drawCube(cube[0] + lineIndex*6,
 						 	cube[1] + horisontalLetterPosition,
 						 	lines.length,
 						 	lengthOfLines);
 						horisontalShift = cube[1];
 					}
-					horisontalLetterPosition += horisontalShift + 2;
-				} else {
-					horisontalLetterPosition++;
-				}
-
+				horisontalLetterPosition += horisontalShift + 2;
+			} else {
+				horisontalLetterPosition++;
 			}
+		}
 	}
 }
 
+/**
+ * Split the text in lines.
+ * */
+function splitText(){
+	/* To do list:
+		- split long words
+	*/
+
+	// Read the text from the input text.
+	let text = document.getElementById("user-text").value;
+	// Make it lower case.
+	text = text.toLowerCase();
+	// Split the words.
+	let words = text.split(" ");
+	// All words lenght will be collected.
+	let wordLength = [];
+	// The maximum cube number in a row.
+	let maxWidth = 32;
+
+	// Collect the word sizes
+	for (wordIndex in words){
+		let letters = words[wordIndex];
+		wordLength.push(0);
+		for (letterIndex in letters){
+			let letter = letters[letterIndex];
+			letterLength = letterPlans(letter).slice(-1)[0][1]+2;
+			wordLength[wordIndex]+=letterLength;
+		}
+	}
+
+	// Go till...
+	let stay = true;
+	while(stay){
+		stay = false;
+		// through the words...
+		for (wordIndex in words){
+			if(wordIndex==0){
+				continue;
+			}
+			let lastWordIndex = wordIndex-1;
+			 
+			if(wordLength[lastWordIndex] + wordLength[wordIndex] < maxWidth){
+				// you can find short neighbor words...
+				stay = true;
+				// merge them...
+				words[lastWordIndex] = words[lastWordIndex] +" "+ words[wordIndex];
+				words.splice(wordIndex,1);
+				// and their length.
+				wordLength[lastWordIndex] = wordLength[lastWordIndex] +" "+ wordLength[wordIndex];
+				wordLength.splice(wordIndex,1);
+	
+				break;
+			}
+		}
+	}
+	return words;
+}
+
 function drawCube(x, y, numOfLines, lengthOfLines){
-	console.log(lengthOfLines);
-	xx=15;
-	yy=15;
+	xx=10;
+	yy=8;
 	x=x*xx+xx;
 	y=y*yy+yy;
 	let can = document.getElementsByTagName("canvas")[0];
