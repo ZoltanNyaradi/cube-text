@@ -83,9 +83,6 @@ function draw(){
  * Split the text in lines.
  * */
 function splitText(){
-	/* To do list:
-		- split long words
-	*/
 
 	// Read the text from the input text.
 	let text = document.getElementById("user-text").value;
@@ -93,21 +90,13 @@ function splitText(){
 	text = text.toLowerCase();
 	// Split the words.
 	let words = text.split(" ");
-	// All words lenght will be collected.
-	let wordLength = [];
 	// The maximum cube number in a row.
-	let maxWidth = 32;
+	let maxWidth = 33;
 
-	// Collect the word sizes
-	for (wordIndex in words){
-		let letters = words[wordIndex];
-		wordLength.push(0);
-		for (letterIndex in letters){
-			let letter = letters[letterIndex];
-			letterLength = letterPlans(letter).slice(-1)[0][1]+2;
-			wordLength[wordIndex]+=letterLength;
-		}
-	}
+	words = splitLongWords(words, maxWidth);
+	console.log(words);
+	// Collect the word lenghts.
+	let wordLengths = wordLenghts(words);
 
 	// Go till...
 	let stay = true;
@@ -119,18 +108,63 @@ function splitText(){
 				continue;
 			}
 			let lastWordIndex = wordIndex-1;
-			 
-			if(wordLength[lastWordIndex] + wordLength[wordIndex] < maxWidth){
-				// you can find short neighbor words...
+			 	// you can find short neighbor words...
+			if(wordLengths[lastWordIndex] + wordLengths[wordIndex] < maxWidth){
 				stay = true;
 				// merge them...
 				words[lastWordIndex] = words[lastWordIndex] +" "+ words[wordIndex];
 				words.splice(wordIndex,1);
 				// and their length.
-				wordLength[lastWordIndex] = wordLength[lastWordIndex] +" "+ wordLength[wordIndex];
-				wordLength.splice(wordIndex,1);
-	
+				wordLengths[lastWordIndex] = wordLengths[lastWordIndex] + wordLengths[wordIndex];
+				wordLengths.splice(wordIndex,1);
 				break;
+			}
+		}
+	}
+	return words;
+}
+
+/**
+ * Return the words lenght
+ */
+function wordLenghts(words){
+	let wordLengths=[];
+	for (wordIndex in words){
+		let letters = words[wordIndex];
+		wordLengths.push(0);
+		for (letterIndex in letters){
+			let letter = letters[letterIndex];
+			letterLength = letterPlans(letter).slice(-1)[0][1]+2;
+			wordLengths[wordIndex]+=letterLength;
+		}
+	}
+	return wordLengths;
+}
+
+function splitLongWords(words, maxWidth){
+	let stay = true;
+	// Collect the word lenghts.
+	let wordLengths = [];
+	while (stay){
+		stay = false;
+		wordLengths = wordLenghts(words);
+		for (wordIndex in wordLengths){
+			if (wordLengths[wordIndex] > maxWidth){
+				let wordsBefore = [];
+				let wordsAfter = [];
+				if (wordIndex != 0){
+					wordsBefore = words.slice(0,wordIndex);
+				}
+				if (wordIndex+1 != wordLengths.length){
+					wordsAfter = words.slice(wordIndex+1);
+				}
+				words = wordsBefore.concat(
+					words[0].slice(0,maxWidth/6),
+					words[0].slice(maxWidth/6),
+					wordsAfter);
+
+				stay = true; 
+				console.log(wordsAfter);
 			}
 		}
 	}
