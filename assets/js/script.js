@@ -171,24 +171,48 @@ function splitLongWords(words, maxWidth){
 	return words;
 }
 
-function drawCube(x, y, numOfLines, lengthOfLines){
+function drawCube(y, x, numOfLines, lengthOfLines){
+
 	xx=10;
-	yy=8;
-	x=x*xx+xx;
-	y=y*yy+yy;
+	yy=10;
+	x=x*5+50;
+	y=y*5+50;
 	let can = document.getElementsByTagName("canvas")[0];
 	let ctx = can.getContext("2d");
 
-	ctx.lineWidth = 2;
+	ctx.lineWidth = 1;
 	ctx.beginPath();
-	ctx.moveTo(y,x);
-	ctx.lineTo(y+yy-1,x);
-	ctx.lineTo(y+yy-1,x+xx-1);
-	ctx.lineTo(y,x+xx-1);
+	ctx.moveTo(x,y);
+	ctx.lineTo(x,y+yy);
+	ctx.lineTo(x+xx,y+yy);
+	ctx.lineTo(x+xx,y);
 	ctx.closePath();
 	ctx.stroke();
-	ctx.fillStyle = "#3366FF";
+	ctx.fillStyle = "yellow";
 	ctx.fill();
+
+	ctx.lineWidth = 1;
+	ctx.beginPath();
+	ctx.moveTo(x,y);
+	ctx.lineTo(x+xx,y);
+	ctx.lineTo(x+1.5*xx,y-0.5*yy);
+	ctx.lineTo(x+0.5*xx,y-0.5*yy);
+	ctx.closePath();
+	ctx.stroke();
+	ctx.fillStyle = "red";
+	ctx.fill();
+
+	ctx.lineWidth = 1;
+	ctx.beginPath();
+	ctx.moveTo(x+xx,y);
+	ctx.lineTo(x+xx,y+yy);
+	ctx.lineTo(x+1.5*xx,y+0.5*yy);
+	ctx.lineTo(x+1.5*xx,y-0.5*yy);
+	ctx.closePath();
+	ctx.stroke();
+	ctx.fillStyle = "blue";
+	ctx.fill();
+
 }
 
 /**
