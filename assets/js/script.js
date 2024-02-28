@@ -95,7 +95,6 @@ function splitText(){
 	let maxWidth = 33;
 
 	words = splitLongWords(words, maxWidth);
-	console.log(words);
 	// Collect the word lenghts.
 	let wordLengths = wordLenghts(words);
 
@@ -172,16 +171,19 @@ function splitLongWords(words, maxWidth){
 	return words;
 }
 
-function drawCube(y, x, numOfLines, lengthOfLines){
+function drawCube(yCubeStart, xCubeStart, numOfLines, lengthOfLines){
 
-	xx=30;
-	yy=30;
-	x=x*30+50;
-	y=y*30+50;
 	let can = document.getElementsByTagName("canvas")[0];
 	let ctx = can.getContext("2d");
 
-	ctx.lineWidth = 1;
+	xx=can.width/36;
+	x=xCubeStart*xx+(36-lengthOfLines)/2*xx;
+	yy=xx*2;
+	y=yCubeStart*yy+can.height/2/numOfLines-2*yy;
+
+	cubeColor = getCubeColor()
+
+	ctx.lineWidth = 2;
 	ctx.beginPath();
 	ctx.moveTo(x,y);
 	ctx.lineTo(x,y+yy);
@@ -192,7 +194,7 @@ function drawCube(y, x, numOfLines, lengthOfLines){
 	ctx.fillStyle = "yellow";
 	ctx.fill();
 
-	ctx.lineWidth = 1;
+	ctx.lineWidth = 2;
 	ctx.beginPath();
 	ctx.moveTo(x,y);
 	ctx.lineTo(x+xx,y);
@@ -203,7 +205,7 @@ function drawCube(y, x, numOfLines, lengthOfLines){
 	ctx.fillStyle = "red";
 	ctx.fill();
 
-	ctx.lineWidth = 1;
+	ctx.lineWidth = 2;
 	ctx.beginPath();
 	ctx.moveTo(x+xx,y);
 	ctx.lineTo(x+xx,y+yy);
@@ -213,7 +215,6 @@ function drawCube(y, x, numOfLines, lengthOfLines){
 	ctx.stroke();
 	ctx.fillStyle = "blue";
 	ctx.fill();
-
 }
 
 /**
@@ -269,4 +270,8 @@ function letterPlans(letter){
 	else{
 		return [[]]
 	}
+}
+
+function getCubeColor(){
+	return "#ffff00";
 }
