@@ -400,9 +400,18 @@ function analogous(rgbArray){
  * Download an image from canvas
  */
 function download(){
-	console.log("File downloaded!");
-}
 
+    const can = document.getElementsByTagName("canvas")[0];
+	const copyButton = document.getElementById("download");
+
+  	const dataURL = can.toDataURL("image/png");
+   
+    const anchor = document.createElement("a");
+    anchor.href = dataURL;
+    anchor.download = "cube-text.png";
+    anchor.click();
+    anchor.remove();
+}
 /**
  * Change background of canvas
  */
