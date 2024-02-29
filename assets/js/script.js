@@ -57,6 +57,7 @@ function draw(){
 			let letterPlan = letterPlans(letters[letterIndex]);
 			lengthOfLines += letterPlan.slice(-1)[0][1]+2;
 		}
+		cubeColor = getCubeColor();
 
 		lengthOfLines -= 2;
 		for (letterIndex in letters){
@@ -68,7 +69,8 @@ function draw(){
 						drawCube(cube[0] + lineIndex*6,
 						 	cube[1] + horisontalLetterPosition,
 						 	lines.length,
-						 	lengthOfLines);
+						 	lengthOfLines,
+						 	cubeColor[cubeIndex%12]);
 						horisontalShift = cube[1];
 					}
 				horisontalLetterPosition += horisontalShift + 2;
@@ -145,6 +147,7 @@ function splitLongWords(words, maxWidth){
 	let stay = true;
 	// Collect the word lenghts.
 	let wordLengths = [];
+
 	while (stay){
 		stay = false;
 		wordLengths = wordLenghts(words);
@@ -161,17 +164,16 @@ function splitLongWords(words, maxWidth){
 				words = wordsBefore.concat(
 					words[0].slice(0,maxWidth/6),
 					words[0].slice(maxWidth/6),
-					wordsAfter);
+					wordsAfter,);
 
-				stay = true; 
-				console.log(wordsAfter);
+				stay = true;
 			}
 		}
 	}
 	return words;
 }
 
-function drawCube(yCubeStart, xCubeStart, numOfLines, lengthOfLines){
+function drawCube(yCubeStart, xCubeStart, numOfLines, lengthOfLines, cubeColor){
 
 	let can = document.getElementsByTagName("canvas")[0];
 	let ctx = can.getContext("2d");
@@ -180,8 +182,6 @@ function drawCube(yCubeStart, xCubeStart, numOfLines, lengthOfLines){
 	x=xCubeStart*xx+(36-lengthOfLines)/2*xx;
 	yy=xx*2;
 	y=yCubeStart*yy+can.height/2/numOfLines-2*yy;
-
-	cubeColor = getCubeColor()
 
 	ctx.lineWidth = 2;
 	ctx.beginPath();
@@ -277,9 +277,13 @@ function getCubeColor(){
 	let colorComb = document.getElementById("color-comb").value;
 	let pickedColor = document.getElementById("cube-color").value;
 	
-	let RGBArray = hexToRGB(pickedColor);
+	let rgbArray = hexToRGB(pickedColor);
+	let rgbsArray = analogous(rgbArray);
 	
-    let cubeColor = shades(RGBArray);
+    let cubeColor = [];
+    for (let i=0;i<12;i++){
+    	cubeColor[i]=shades(rgbsArray[i]);
+    }
 
 
 	if (colorComb == "single"){
@@ -314,7 +318,7 @@ function hexToRGB(hex){
 			case "a": num2 = 10; break;
 			default : num2 = parseInt(color[i][1]); break;
 		}
-		color[i]=num1*15+num2;
+		color[i]=num1*16+num2;
 	}
 	return color;
 }
@@ -325,4 +329,68 @@ function shades(RGBArray){
 	RGB[1] = "rgb("+Math.floor(RGBArray[0]*0.75)+","+Math.floor(RGBArray[1]*0.75)+","+Math.floor(RGBArray[2]*0.75)+")";
 	RGB[2] = "rgb("+Math.floor(RGBArray[0]*0.5)+","+Math.floor(RGBArray[1]*0.5)+","+Math.floor(RGBArray[2]*0.5)+")";
 	return RGB;
+}
+
+function analogous(rgbArray){
+	let rgbsArrays=[rgbArray];
+
+	let rgbArrayCopy = [...rgbArray];
+
+	let min = Math.min(rgbArrayCopy[0],rgbArrayCopy[1],rgbArrayCopy[2]);
+	let minIndex = rgbArrayCopy.indexOf(min);
+	rgbArrayCopy[minIndex] = 300;
+
+	let mid = Math.min(rgbArrayCopy[0],rgbArrayCopy[1],rgbArrayCopy[2]);
+	let midIndex = rgbArrayCopy.indexOf(mid);
+	rgbArrayCopy[midIndex] = 300;
+
+	let max = Math.min(rgbArrayCopy[0],rgbArrayCopy[1],rgbArrayCopy[2]);
+	let maxIndex = rgbArrayCopy.indexOf(max);
+
+	let step = (max-min)/2;
+
+	rgbArrayCopy = [...rgbArray];
+
+	for(let i=1; i<12; i++){
+		if(maxIndex==0 && midIndex==1 || maxIndex==1 && midIndex==2 || maxIndex==2 && midIndex==0){
+			if(max-step>mid){
+				rgbArrayCopy[maxIndex]=max;
+				rgbArrayCopy[midIndex]=mid+step;
+				rgbArrayCopy[minIndex]=min;
+
+				mid=mid+step;
+			} else {
+				rgbArrayCopy[maxIndex]=2*max-mid-step;
+				rgbArrayCopy[midIndex]=max;
+				rgbArrayCopy[minIndex]=min;
+
+				mid = 2*max-mid-step;
+
+				let variable = midIndex;
+				midIndex = maxIndex;
+				maxIndex = variable;
+			}
+		} else {
+			if(min+step<mid){
+				rgbArrayCopy[maxIndex]=max;
+				rgbArrayCopy[midIndex]=mid-step;
+				rgbArrayCopy[minIndex]=min;
+
+				mid=mid-step;
+			} else {
+				rgbArrayCopy[maxIndex]=max;
+				rgbArrayCopy[midIndex]=min;
+				rgbArrayCopy[minIndex]=2*min+step-mid;
+
+				mid = 2*min+step-mid;
+				let variable = midIndex;
+				midIndex = minIndex;
+				minIndex = variable;
+			}
+		}
+	rgbsArrays[i] = [...rgbArrayCopy];	
+	}
+	 console.log(rgbsArrays);
+
+	return rgbsArrays;
 }
