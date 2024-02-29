@@ -202,7 +202,7 @@ function drawCube(yCubeStart, xCubeStart, numOfLines, lengthOfLines){
 	ctx.lineTo(x+0.5*xx,y-0.5*yy);
 	ctx.closePath();
 	ctx.stroke();
-	ctx.fillStyle = "red";
+	ctx.fillStyle = cubeColor[1];
 	ctx.fill();
 
 	ctx.lineWidth = 2;
@@ -213,7 +213,7 @@ function drawCube(yCubeStart, xCubeStart, numOfLines, lengthOfLines){
 	ctx.lineTo(x+1.5*xx,y-0.5*yy);
 	ctx.closePath();
 	ctx.stroke();
-	ctx.fillStyle = "blue";
+	ctx.fillStyle = cubeColor[2];
 	ctx.fill();
 }
 
@@ -239,7 +239,7 @@ function letterPlans(letter){
 		"a":[[4,0],[3,0],[2,0],[1,0],[0,0],[2,1],[0,1],[4,2],[3,2],[2,2],[1,2],[0,2]],
 		"b":[[4,0],[3,0],[2,0],[1,0],[0,0],[2,1],[4,1],[4,2],[3,2],[2,2]],
 		"c":[[4,0],[3,0],[2,0],[1,0],[0,0],[4,1],[0,1],[4,2],[0,2]],
-		"d":[[4,0],[3,0],[2,0],[4,1],[2,1],[4,2],[3,2],[2,2],[2,2],[1,2]],
+		"d":[[4,0],[3,0],[2,0],[4,1],[2,1],[4,2],[3,2],[2,2],[2,2],[1,2],[0,2]],
 		"e":[[4,0],[3,0],[2,0],[1,0],[0,0],[4,1],[2,1],[0,1],[4,2],[2,2],[1,2],[0,2]],
 		"f":[[4,0],[3,0],[2,0],[1,0],[0,0],[2,1],[0,1],[2,2],[0,2]],
 		"g":[[4,0],[3,0],[2,0],[1,0],[0,0],[4,1],[0,1],[4,2],[2,2],[0,2],[4,3],[3,3],[2,3],[0,3]],
@@ -279,17 +279,18 @@ function getCubeColor(){
 	
 	let RGBArray = hexToRGB(pickedColor);
 	
-	let cubeColor = shades();
+    let cubeColor = shades(RGBArray);
 
 
 	if (colorComb == "single"){
-		RGBArray
+		
 
 		
 	}
 		
-	return pickedColor;
+	return cubeColor;
 }
+
 function hexToRGB(hex){
 	let color = [hex.slice(1,3),hex.slice(3,5),hex.slice(5,7)];
 	for (let i=0; i<3; i++){
@@ -317,4 +318,11 @@ function hexToRGB(hex){
 	}
 	return color;
 }
-//function shades(){}
+
+function shades(RGBArray){
+	let RGB = [];
+	RGB[0] = "rgb("+RGBArray[0]+","+RGBArray[1]+","+RGBArray[2]+")";
+	RGB[1] = "rgb("+Math.floor(RGBArray[0]*0.75)+","+Math.floor(RGBArray[1]*0.75)+","+Math.floor(RGBArray[2]*0.75)+")";
+	RGB[2] = "rgb("+Math.floor(RGBArray[0]*0.5)+","+Math.floor(RGBArray[1]*0.5)+","+Math.floor(RGBArray[2]*0.5)+")";
+	return RGB;
+}
