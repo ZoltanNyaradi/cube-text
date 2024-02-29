@@ -235,20 +235,6 @@ function drawCube(yCubeStart, xCubeStart, numOfLines, lengthOfLines, cubeColor){
 }
 
 /**
- * Download an image from canvas
- */
-function download(){
-	console.log("File downloaded!");
-}
-
-/**
- * Change background of canvas
- */
-function changeBackground(){
-	console.log("Background changed!");
-}
-
-/**
  * Returns the given letter's building cube's coordinates.
  */
 function letterPlans(letter){
@@ -407,7 +393,21 @@ function analogous(rgbArray){
 		}
 	rgbsArrays[i] = [...rgbArrayCopy];	
 	}
-	 console.log(rgbsArrays);
-
 	return rgbsArrays;
+}
+
+/**
+ * Download an image from canvas
+ */
+function download(){
+	console.log("File downloaded!");
+}
+
+/**
+ * Change background of canvas
+ */
+function changeBackground(){
+	let can = document.getElementsByTagName("canvas")[0];
+	can.style.backgroundColor=document.getElementById("cube-background").value;
+	console.log(can.style.backgroundColor);
 }
