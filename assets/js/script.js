@@ -191,7 +191,7 @@ function drawCube(yCubeStart, xCubeStart, numOfLines, lengthOfLines){
 	ctx.lineTo(x+xx,y);
 	ctx.closePath();
 	ctx.stroke();
-	ctx.fillStyle = "yellow";
+	ctx.fillStyle = cubeColor[0];
 	ctx.fill();
 
 	ctx.lineWidth = 2;
@@ -273,5 +273,48 @@ function letterPlans(letter){
 }
 
 function getCubeColor(){
-	return "#ffff00";
+
+	let colorComb = document.getElementById("color-comb").value;
+	let pickedColor = document.getElementById("cube-color").value;
+	
+	let RGBArray = hexToRGB(pickedColor);
+	
+	let cubeColor = shades();
+
+
+	if (colorComb == "single"){
+		RGBArray
+
+		
+	}
+		
+	return pickedColor;
 }
+function hexToRGB(hex){
+	let color = [hex.slice(1,3),hex.slice(3,5),hex.slice(5,7)];
+	for (let i=0; i<3; i++){
+		let num1=0;
+		switch (color[i][0]){
+			case "f": num1 = 15; break;
+			case "e": num1 = 14; break;
+			case "d": num1 = 13; break;
+			case "c": num1 = 12; break;
+			case "b": num1 = 11; break;
+			case "a": num1 = 10; break;
+			default : num1 = parseInt(color[i][0]); break;
+		}
+		let num2=0;
+		switch (color[i][1]){
+			case "f": num2 = 15; break;
+			case "e": num2 = 14; break;
+			case "d": num2 = 13; break;
+			case "c": num2 = 12; break;
+			case "b": num2 = 11; break;
+			case "a": num2 = 10; break;
+			default : num2 = parseInt(color[i][1]); break;
+		}
+		color[i]=num1*15+num2;
+	}
+	return color;
+}
+//function shades(){}
