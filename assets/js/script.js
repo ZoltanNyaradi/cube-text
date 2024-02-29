@@ -42,10 +42,12 @@ function draw(){
 	if (document.getElementById("user-text").value === ""){
 		lines = ["cube text"];
 	}else{
-		// lower case
-		// calculate lines
 		lines = splitText();
 	}
+
+	let cubeNumber = 0;
+	let letterNumber = 0;
+
 	for (lineIndex in lines){
 		let letters = lines[lineIndex];
 		let horisontalLetterPosition = 0;
@@ -57,26 +59,41 @@ function draw(){
 			let letterPlan = letterPlans(letters[letterIndex]);
 			lengthOfLines += letterPlan.slice(-1)[0][1]+2;
 		}
-		cubeColor = getCubeColor();
+		cubeColors = getCubeColor();
 
-		lengthOfLines -= 2;
+		lengthOfLines -= 2;		let colorComb = document.getElementById("color-comb").value;
+		let cubeColor = cubeColors[0];
+
 		for (letterIndex in letters){
+			if (colorComb=="rainbow-letter") 
+				{cubeColor=cubeColors[letterNumber%12];}
+			if (colorComb=="random-letter") 
+				{cubeColor=cubeColors[Math.floor(Math.random()*12)];}
+
 			if (letters[letterIndex]!==" "){
 				let letterPlan = letterPlans(letters[letterIndex]);
 				let horisontalShift;
 					for(cubeIndex in letterPlan){
 						let cube = letterPlan[cubeIndex];
+
+						if (colorComb=="rainbow-cube") 
+							{cubeColor=cubeColors[cubeNumber%12];}
+						if (colorComb=="random-cube") 
+							{cubeColor=cubeColors[Math.floor(Math.random()*12)];}
+
 						drawCube(cube[0] + lineIndex*6,
 						 	cube[1] + horisontalLetterPosition,
 						 	lines.length,
 						 	lengthOfLines,
-						 	cubeColor[cubeIndex%12]);
+						 	cubeColor);
 						horisontalShift = cube[1];
+						cubeNumber++;
 					}
 				horisontalLetterPosition += horisontalShift + 2;
 			} else {
 				horisontalLetterPosition++;
 			}
+		letterNumber++;
 		}
 
 	}
