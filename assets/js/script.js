@@ -177,6 +177,9 @@ function wordLenghts(words){
 	return wordLengths;
 }
 
+/**
+ * Split the words if they are too long to fit in to the canvas.
+ */
 function splitLongWords(words, maxWidth){
 	let stay = true;
 	// Collect the word lenghts.
@@ -207,16 +210,24 @@ function splitLongWords(words, maxWidth){
 	return words;
 }
 
+/**
+ * Draws a cube.
+ * */
 function drawCube(yCubeStart, xCubeStart, numOfLines, lengthOfLines, cubeColor, maxWidth){
 
 	let can = document.getElementsByTagName("canvas")[0];
 	let ctx = can.getContext("2d");
 
+	// Width of the cube.
 	xx=can.width/(maxWidth+3);
+	// Starting position of this cube on the x axis.
 	x=xCubeStart*xx+(maxWidth+3-lengthOfLines)/2*xx;
+	// Height of the cube.
 	yy=xx*2;
+	// Starting position of this cube on the y axis.
 	y=yCubeStart*yy+can.height/2/numOfLines-2*yy;
 
+	// Draws the front.
 	ctx.lineWidth = 2;
 	ctx.beginPath();
 	ctx.moveTo(x,y);
@@ -228,6 +239,7 @@ function drawCube(yCubeStart, xCubeStart, numOfLines, lengthOfLines, cubeColor, 
 	ctx.fillStyle = cubeColor[0];
 	ctx.fill();
 
+	// Draws the top.
 	ctx.lineWidth = 2;
 	ctx.beginPath();
 	ctx.moveTo(x,y);
@@ -239,6 +251,7 @@ function drawCube(yCubeStart, xCubeStart, numOfLines, lengthOfLines, cubeColor, 
 	ctx.fillStyle = cubeColor[1];
 	ctx.fill();
 
+	// Draws the side.
 	ctx.lineWidth = 2;
 	ctx.beginPath();
 	ctx.moveTo(x+xx,y);
@@ -292,31 +305,33 @@ function letterPlans(letter){
 	}
 }
 
+/***
+ * Reads the color given by the user,
+ * and return it with analogus colors
+ * and shades.
+ */
 function getCubeColor(){
-
-	let colorComb = document.getElementById("color-comb").value;
+	// Read user color.
 	let pickedColor = document.getElementById("cube-color").value;
-	
+	// Turns the color to RGB.
 	let rgbArray = hexToRGB(pickedColor);
+	// Gives the analogous colors
 	let rgbsArray = analogous(rgbArray);
-	
+	// Gives the shades
     let cubeColor = [];
     for (let i=0;i<12;i++){
     	cubeColor[i]=shades(rgbsArray[i]);
-    }
-
-
-	if (colorComb == "single"){
-		
-
-		
-	}
-		
+    }	
 	return cubeColor;
 }
 
+/**
+ *  Makes an array with decimal numbers from a hexadecimal color code
+ */
 function hexToRGB(hex){
+	// Slices the hex code in three.
 	let color = [hex.slice(1,3),hex.slice(3,5),hex.slice(5,7)];
+	// Change all the three hexadecimal number to decimal.
 	for (let i=0; i<3; i++){
 		let num1=0;
 		switch (color[i][0]){
@@ -351,63 +366,95 @@ function shades(RGBArray){
 	return RGB;
 }
 
+/**
+ * Gives the analogous coloros of the chosen color.
+ * 
+ * Takes the rgb components of the chosen color in an array
+ * and returns of the rgb components of the color and
+ * its analogus color in a matrix.
+ */
 function analogous(rgbArray){
+	// Declare the matrix and assign its first row.
 	let rgbsArrays=[rgbArray];
-
+	// Make a deep copy from the chosen color.
 	let rgbArrayCopy = [...rgbArray];
 
+	// Take the smaller component.
 	let min = Math.min(rgbArrayCopy[0],rgbArrayCopy[1],rgbArrayCopy[2]);
+	// Take the index of the smaller component.
 	let minIndex = rgbArrayCopy.indexOf(min);
+	// Raise the smaller component for the next step.
 	rgbArrayCopy[minIndex] = 300;
 
+	// Take the middle component.
 	let mid = Math.min(rgbArrayCopy[0],rgbArrayCopy[1],rgbArrayCopy[2]);
+	// Take the index of the middle component.
 	let midIndex = rgbArrayCopy.indexOf(mid);
+	// Raise the middle component for the next step.
 	rgbArrayCopy[midIndex] = 300;
 
+	// Take the biggest component.
 	let max = Math.min(rgbArrayCopy[0],rgbArrayCopy[1],rgbArrayCopy[2]);
+	// Take the index of the biggest component.
 	let maxIndex = rgbArrayCopy.indexOf(max);
 
+	// Take the distance between to analogous color.
 	let step = (max-min)/2;
 
+	// Set back the copy
 	rgbArrayCopy = [...rgbArray];
 
+	// Fill the last 11 row
 	for(let i=1; i<12; i++){
+		/* 
+			If the biggest number is before the middle
+			number then it adds a step to the middle number
+			otherwise is substrackts one.
+		*/
 		if(maxIndex==0 && midIndex==1 || maxIndex==1 && midIndex==2 || maxIndex==2 && midIndex==0){
+			/*
+				If the bigger value further from the middle value than one step
+				then raises the middle value with one step,
+				otherwise raises till the bigger value,
+				and substrackts the leftover from the bigger value. 
+			*/
 			if(max-step>mid){
-				rgbArrayCopy[maxIndex]=max;
 				rgbArrayCopy[midIndex]=mid+step;
-				rgbArrayCopy[minIndex]=min;
 
 				mid=mid+step;
 			} else {
 				rgbArrayCopy[maxIndex]=2*max-mid-step;
 				rgbArrayCopy[midIndex]=max;
-				rgbArrayCopy[minIndex]=min;
 
 				mid = 2*max-mid-step;
-
+				// Swaps the mid and max index.
 				let variable = midIndex;
 				midIndex = maxIndex;
 				maxIndex = variable;
 			}
 		} else {
+			/*
+				If the smaller value further from the middle value than one step
+				then lowwers the middle value with one step,
+				otherwise lowers till the smaller value,
+				and adds the leftover to the smaller value. 
+			*/
 			if(min+step<mid){
-				rgbArrayCopy[maxIndex]=max;
 				rgbArrayCopy[midIndex]=mid-step;
-				rgbArrayCopy[minIndex]=min;
 
 				mid=mid-step;
 			} else {
-				rgbArrayCopy[maxIndex]=max;
 				rgbArrayCopy[midIndex]=min;
 				rgbArrayCopy[minIndex]=2*min+step-mid;
-
+			
 				mid = 2*min+step-mid;
+			// Swaps the mid and min index.	
 				let variable = midIndex;
 				midIndex = minIndex;
 				minIndex = variable;
 			}
 		}
+		// Adds the new color to the matrix.
 	rgbsArrays[i] = [...rgbArrayCopy];	
 	}
 	return rgbsArrays;
