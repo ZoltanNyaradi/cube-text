@@ -34,15 +34,33 @@ function setCanvasSize(){
  * Draw the cube text
  * */
 function draw(){
+
 	let canvas = document.getElementsByTagName("canvas")[0];
 	const ctx = canvas.getContext('2d');
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	
+	let maxWidth=0;
+	if (canvas.width<=500){
+		maxWidth=33;
+	} else if (canvas.width<=600){
+		maxWidth=38;
+	} else if (canvas.width<=768){
+		maxWidth=40;
+	} else if (canvas.width<=992){
+		maxWidth=42;
+	} else if (canvas.width<=1200){
+		maxWidth=45;
+	} else if (canvas.width<=1500){
+		maxWidth=50;
+	} else {
+		maxWidth=55;
+	}
 
 	let lines =[];
 	if (document.getElementById("user-text").value === ""){
 		lines = ["cube text"];
 	}else{
-		lines = splitText();
+		lines = splitText(maxWidth);
 	}
 
 	let cubeNumber = 0;
@@ -85,7 +103,8 @@ function draw(){
 						 	cube[1] + horisontalLetterPosition,
 						 	lines.length,
 						 	lengthOfLines,
-						 	cubeColor);
+						 	cubeColor,
+						 	maxWidth);
 						horisontalShift = cube[1];
 						cubeNumber++;
 					}
@@ -102,7 +121,7 @@ function draw(){
 /**
  * Split the text in lines.
  * */
-function splitText(){
+function splitText(maxWidth){
 
 	// Read the text from the input text.
 	let text = document.getElementById("user-text").value;
@@ -110,8 +129,6 @@ function splitText(){
 	text = text.toLowerCase();
 	// Split the words.
 	let words = text.split(" ");
-	// The maximum cube number in a row.
-	let maxWidth = 33;
 
 	words = splitLongWords(words, maxWidth);
 	// Collect the word lenghts.
@@ -190,13 +207,13 @@ function splitLongWords(words, maxWidth){
 	return words;
 }
 
-function drawCube(yCubeStart, xCubeStart, numOfLines, lengthOfLines, cubeColor){
+function drawCube(yCubeStart, xCubeStart, numOfLines, lengthOfLines, cubeColor, maxWidth){
 
 	let can = document.getElementsByTagName("canvas")[0];
 	let ctx = can.getContext("2d");
 
-	xx=can.width/36;
-	x=xCubeStart*xx+(36-lengthOfLines)/2*xx;
+	xx=can.width/(maxWidth+3);
+	x=xCubeStart*xx+(maxWidth+3-lengthOfLines)/2*xx;
 	yy=xx*2;
 	y=yCubeStart*yy+can.height/2/numOfLines-2*yy;
 
