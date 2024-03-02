@@ -54,7 +54,14 @@ section{
 }
 
 #user-text{
+	position: absolute;
+	top: 40%;
+	left: 10%;
 
+	box-shadow: 2px -2px 0 0px black;
+
+	height: 17%;
+	width: 80%;
 }
 
 /* Other options */
