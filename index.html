@@ -16,44 +16,46 @@
 		<link rel="stylesheet" href="assets/css/style.css"></link>
 	</head>
 	<body>
-		<!-- Header, but hidden-->
-		<header>
-			<h1>Cube Text</h1>
-		</header>
-		<!-- Drawing area -->
-		<canvas></canvas>
-		<section>
-			<!-- User text -->
-			<div id="user-text-div">
-				<input type="text" id="user-text" placeholder="Type your cubetext!">
+		<div id="outer-div">
+			<!-- Header, but hidden-->
+			<header>
+				<h1>Cube Text</h1>
+			</header>
+			<!-- Drawing area -->
+			<canvas></canvas>
+			<div>
+				<!-- User text -->
+				<div id="user-text-div">
+					<input type="text" id="user-text" placeholder="Type your cubetext!">
+				</div>
+				<!-- Options -->
+				<div id=options>	
+					<div id="download-div">
+						<button type="button" id="download">Download</button>
+						<label for="download">Download with transparent color.</label>
+					</div>
+					<div>
+						<select id="color-comb">
+						    <option value="single">Single color</option>
+						    <option value="rainbow-letter">Rainbow color by letter</option>
+						    <option value="random-letter">Random color by letter</option>
+						    <option value="rainbow-cube">Rainbow color by cubes</option>
+						    <option value="random-cube">Random color by cubes</option>
+					  	</select>
+					</div>
+					<div>
+						<div>
+							<input type="color" id="cube-color">
+							<label for=cube-color>Chose a color!</label>
+						</div>
+						<div>
+							<input type="color" id="cube-background">
+							<label for=cube-background>Chose a background color!</label>
+						</div>
+					</div>
+				</div>	
 			</div>
-			<!-- Options -->
-			<div id=options>	
-				<div id="download-div">
-					<button type="button" id="download">Download</button>
-					<label for="download">Download with transparent color.</label>
-				</div>
-				<div>
-					<select id="color-comb">
-					    <option value="single">Single color</option>
-					    <option value="rainbow-letter">Rainbow color by letter</option>
-					    <option value="random-letter">Random color by letter</option>
-					    <option value="rainbow-cube">Rainbow color by cubes</option>
-					    <option value="random-cube">Random color by cubes</option>
-				  	</select>
-				</div>
-				<div>
-					<div>
-						<input type="color" id="cube-color">
-						<label for=cube-color>Chose a color!</label>
-					</div>
-					<div>
-						<input type="color" id="cube-background">
-						<label for=cube-background>Chose a background color!</label>
-					</div>
-				</div>
-			</div>	
-		</section>
+		</div>
 		<!-- JavaScript -->
 		<script src="assets/js/script.js"></script>
 	</dody>	
